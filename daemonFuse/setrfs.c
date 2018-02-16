@@ -260,16 +260,24 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 static int setrfs_read(const char *path, char *buf, size_t size, off_t offset,
 		    struct fuse_file_info *fi)
 {
-		// TODO
+	// TODO
 }
 
 
 // Cette fonction est appelée lorsqu'un processus ferme un fichier (close).
 // Vous n'avez rien de particulier à produire comme résultat, mais vous devez vous assurer de libérer toute la mémoire
 // utilisée pour stocker ce fichier (pensez au buffer contenant son cache, son nom, etc.)
-static int setrfs_release(const char *path, struct fuse_file_info *fi)
-{
-		// TODO
+static int setrfs_release(const char *path, struct fuse_file_info *fi) {
+
+	// TODO
+
+	struct fuse_context *context = fuse_get_context();
+	struct cacheData *cache = (struct cacheData*)context->private_data;
+
+	pthread_mutex_lock(&(cache->mutex));
+	struct cacheFichier *fichier = trouverFichierEnCache(path, cache);
+	retireFichier(fichier, cache);
+	pthread_mutex_unlock(&(cache->mutex));
 }
 
 
