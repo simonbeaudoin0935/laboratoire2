@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+=======
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 
 #IncludeRegexScan: ^.*$
 
@@ -6,11 +10,19 @@
 
 #IncludeRegexTransform: 
 
+<<<<<<< HEAD
 /home/simon/setr/Projets/laboratoire2/serveurCurl/actions.c
 actions.h
 /home/simon/setr/Projets/laboratoire2/serveurCurl/actions.h
 
 /home/simon/setr/Projets/laboratoire2/serveurCurl/actions.h
+=======
+/home/setr/setr/Projets/laboratoire2/serveurCurl/actions.c
+actions.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/actions.h
+
+/home/setr/setr/Projets/laboratoire2/serveurCurl/actions.h
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 stdio.h
 -
 stdlib.h
@@ -34,6 +46,7 @@ sys/un.h
 fcntl.h
 -
 communications.h
+<<<<<<< HEAD
 /home/simon/setr/Projets/laboratoire2/serveurCurl/communications.h
 requete.h
 /home/simon/setr/Projets/laboratoire2/serveurCurl/requete.h
@@ -45,6 +58,19 @@ communications.h
 /home/simon/setr/Projets/laboratoire2/serveurCurl/communications.h
 
 /home/simon/setr/Projets/laboratoire2/serveurCurl/communications.h
+=======
+/home/setr/setr/Projets/laboratoire2/serveurCurl/communications.h
+requete.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/requete.h
+telechargeur.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/telechargeur.h
+
+/home/setr/setr/Projets/laboratoire2/serveurCurl/communications.c
+communications.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/communications.h
+
+/home/setr/setr/Projets/laboratoire2/serveurCurl/communications.h
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 stdio.h
 -
 stdlib.h
@@ -56,11 +82,19 @@ sys/socket.h
 unistd.h
 -
 
+<<<<<<< HEAD
 /home/simon/setr/Projets/laboratoire2/serveurCurl/requete.c
 requete.h
 /home/simon/setr/Projets/laboratoire2/serveurCurl/requete.h
 
 /home/simon/setr/Projets/laboratoire2/serveurCurl/requete.h
+=======
+/home/setr/setr/Projets/laboratoire2/serveurCurl/requete.c
+requete.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/requete.h
+
+/home/setr/setr/Projets/laboratoire2/serveurCurl/requete.h
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 stdio.h
 -
 stdlib.h
@@ -68,9 +102,15 @@ stdlib.h
 string.h
 -
 communications.h
+<<<<<<< HEAD
 /home/simon/setr/Projets/laboratoire2/serveurCurl/communications.h
 
 /home/simon/setr/Projets/laboratoire2/serveurCurl/servermain.c
+=======
+/home/setr/setr/Projets/laboratoire2/serveurCurl/communications.h
+
+/home/setr/setr/Projets/laboratoire2/serveurCurl/servermain.c
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 stdio.h
 -
 stdlib.h
@@ -96,6 +136,7 @@ fcntl.h
 signal.h
 -
 communications.h
+<<<<<<< HEAD
 /home/simon/setr/Projets/laboratoire2/serveurCurl/communications.h
 telechargeur.h
 /home/simon/setr/Projets/laboratoire2/serveurCurl/telechargeur.h
@@ -109,6 +150,21 @@ telechargeur.h
 /home/simon/setr/Projets/laboratoire2/serveurCurl/telechargeur.h
 
 /home/simon/setr/Projets/laboratoire2/serveurCurl/telechargeur.h
+=======
+/home/setr/setr/Projets/laboratoire2/serveurCurl/communications.h
+telechargeur.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/telechargeur.h
+requete.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/requete.h
+actions.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/actions.h
+
+/home/setr/setr/Projets/laboratoire2/serveurCurl/telechargeur.c
+telechargeur.h
+/home/setr/setr/Projets/laboratoire2/serveurCurl/telechargeur.h
+
+/home/setr/setr/Projets/laboratoire2/serveurCurl/telechargeur.h
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 stdio.h
 -
 stdlib.h
@@ -118,5 +174,9 @@ string.h
 curl/curl.h
 -
 communications.h
+<<<<<<< HEAD
 /home/simon/setr/Projets/laboratoire2/serveurCurl/communications.h
+=======
+/home/setr/setr/Projets/laboratoire2/serveurCurl/communications.h
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 

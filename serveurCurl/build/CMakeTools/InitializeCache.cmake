@@ -5,5 +5,9 @@ if(POLICY CMP0053)
 endif()
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Variable supplied by CMakeTools. Value is forced." FORCE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS "TRUE" CACHE BOOL "Variable supplied by CMakeTools. Value is forced." FORCE)
+<<<<<<< HEAD
 set(CMAKE_MODULE_PATH "/home/simon/setr/Projets/laboratoire2/serveurCurl/build/CMakeTools" CACHE STRING "Variable supplied by CMakeTools. Value is forced." FORCE)
+=======
+set(CMAKE_MODULE_PATH "/home/setr/setr/Projets/laboratoire2/serveurCurl/build/CMakeTools" CACHE STRING "Variable supplied by CMakeTools. Value is forced." FORCE)
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 cmake_policy(POP)

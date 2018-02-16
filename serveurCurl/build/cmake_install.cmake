@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Install script for directory: /home/simon/setr/Projets/laboratoire2/serveurCurl
+=======
+# Install script for directory: /home/setr/setr/Projets/laboratoire2/serveurCurl
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,7 +33,16 @@ endif()
 
 # Install shared libraries without execute permission?
 if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+<<<<<<< HEAD
   set(CMAKE_INSTALL_SO_NO_EXE "1")
+=======
+  set(CMAKE_INSTALL_SO_NO_EXE "0")
+endif()
+
+# Is this installation the result of a crosscompile?
+if(NOT DEFINED CMAKE_CROSSCOMPILING)
+  set(CMAKE_CROSSCOMPILING "TRUE")
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -40,5 +53,9 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
+<<<<<<< HEAD
 file(WRITE "/home/simon/setr/Projets/laboratoire2/serveurCurl/build/${CMAKE_INSTALL_MANIFEST}"
+=======
+file(WRITE "/home/setr/setr/Projets/laboratoire2/serveurCurl/build/${CMAKE_INSTALL_MANIFEST}"
+>>>>>>> f58e945229af088815a072677a69c3e28166ea16
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
