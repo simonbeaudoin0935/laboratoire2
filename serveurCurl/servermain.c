@@ -64,7 +64,8 @@ int main(int argc, char* argv[]){
 
     // TODO
     // Implémentez ici le code permettant d'attacher la fonction "gereSignal" au signal SIGUSR2
-    gereSignal(SIGUSR2);
+    signal(SIGUSR2, gereSignal);
+    
 
     // TODO
     // Création et initialisation du socket (il y a 5 étapes)

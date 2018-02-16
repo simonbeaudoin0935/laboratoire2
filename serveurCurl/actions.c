@@ -1,5 +1,7 @@
 #include "actions.h"
 
+#include <string.h>
+
 int verifierNouvelleConnexion(struct requete reqList[], int maxlen, int socket){
     // Dans cette fonction, vous devez d'abord vérifier si le serveur peut traiter
     // une nouvelle connexions (autrement dit, si le nombre de connexions en cours
@@ -95,6 +97,12 @@ int traiterConnexions(struct requete reqList[], int maxlen){
                     // Voyez man pipe pour plus d'informations sur son fonctionnement
                     // TODO
 
+                    int pipefd[2];
+                    if (pipe(pipefd) == -1) {
+                        perror("pipe");
+                        exit(EXIT_FAILURE);
+                    }
+
                     // Une fois le pipe initialisé, vous devez effectuer un fork, à l'aide de la fonction du même nom
                     // Cela divisera votre processus en deux nouveaux processus, un parent et un enfant.
                     // - Dans le processus enfant, vous devez appeler la fonction executeRequete() en lui donnant
@@ -108,6 +116,26 @@ int traiterConnexions(struct requete reqList[], int maxlen){
                     // le parent ou dans l'enfant, voyez man fork(2).
                     // TODO
 
+                    pid_t cpid;
+
+                    cpid = fork();
+                    if (cpid == -1) {
+                        perror("fork");
+                        exit(EXIT_FAILURE);
+                    }
+
+                    if (cpid == 0) {    /* Le fils lit dans le tube */
+                        close(pipefd[0]);  /* Ferme l'extrémité de lecture inutilisée */
+                        executeRequete(pipefd[1], buffer);
+                        _exit(EXIT_SUCCESS);
+
+                    } else {                    /* Le père écrit argv[1] dans le tube */
+                        close(pipefd[1]); //ferme l'extrémité d'écriture inutilisée
+                        
+                        reqList[i].pid = cpid;
+                        reqList[i].status = REQ_STATUS_INPROGRESS;
+                        reqList[i].fdPipe = pipefd[0];
+                    }
                 }
             }
         }
