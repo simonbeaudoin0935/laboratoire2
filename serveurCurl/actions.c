@@ -125,30 +125,17 @@ int traiterConnexions(struct requete reqList[], int maxlen){
                     }
 
                     if (cpid == 0) {    /* Le fils lit dans le tube */
-                        //close(pipefd[1]);  /* Ferme l'extrémité d'écriture inutilisée */
-
-                        //while (read(pipefd[0], &buf, 1) > 0)
-                        //    write(STDOUT_FILENO, &buf, 1);
-
-                       // write(STDOUT_FILENO, "\n", 1);
-                        //close(pipefd[0]);
+                        close(pipefd[0]);  /* Ferme l'extrémité de lecture inutilisée */
+                        executeRequete(pipefd[1], buffer);
                         _exit(EXIT_SUCCESS);
 
                     } else {                    /* Le père écrit argv[1] dans le tube */
-                        // close(pipefd[0]);       /* Ferme l'extrémité de lecture inutilisée */
-                       //  write(pipefd[1], argv[1], strlen(argv[1]));
-                       //  close(pipefd[1]);       /* Le lecteur verra EOF */
-                       // wait(NULL);             /* Attente du fils */
-                        //exit(EXIT_SUCCESS);
+                        close(pipefd[1]); //ferme l'extrémité d'écriture inutilisée
+                        
+                        reqList[i].pid = cpid;
+                        reqList[i].status = REQ_STATUS_INPROGRESS;
+                        reqList[i].fdPipe = pipefd[0];
                     }
-
-
-
-
-
-
-
-
                 }
             }
         }
