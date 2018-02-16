@@ -29,12 +29,15 @@ int verifierNouvelleConnexion(struct requete reqList[], int maxlen, int socket){
     peer_addr_size = sizeof(struct sockaddr_un);
     acceptSocket = accept(socket, (struct sockaddr *) &peer_addr, &peer_addr_size);
     if(acceptSocket == -1){
-        printf("Error with accept function : %s\n", strerror(errno));
+        //perror("accept socket");
+        //printf(ERRNONAME(errno));
         return 0;
     }
 
+    
+
     reqList[newEntry].status = REQ_STATUS_LISTEN;
-    reqList[newEntry].fdSocket = socket;
+    reqList[newEntry].fdSocket = acceptSocket;
     return 1;
 }
 
@@ -124,13 +127,13 @@ int traiterConnexions(struct requete reqList[], int maxlen){
                         exit(EXIT_FAILURE);
                     }
 
-                    if (cpid == 0) {    /* Le fils lit dans le tube */
-                        close(pipefd[0]);  /* Ferme l'extrémité de lecture inutilisée */
+                    if (cpid == 0) {   //fils
+                        //close(pipefd[0]);  /* Ferme l'extrémité de lecture inutilisée */
                         executeRequete(pipefd[1], buffer);
                         _exit(EXIT_SUCCESS);
 
-                    } else {                    /* Le père écrit argv[1] dans le tube */
-                        close(pipefd[1]); //ferme l'extrémité d'écriture inutilisée
+                    } else {                //parent
+                       // close(pipefd[1]); //ferme l'extrémité d'écriture inutilisée
                         
                         reqList[i].pid = cpid;
                         reqList[i].status = REQ_STATUS_INPROGRESS;
@@ -169,4 +172,73 @@ int traiterTelechargements(struct requete reqList[], int maxlen){
     // Cette fonction doit retourner 0 si elle n'a lu aucune donnée supplémentaire, ou un nombre > 0 si c'est le cas.
 
     // TODO
+
+    fd_set setSockets;
+    struct timeval tvS;
+    tvS.tv_sec = 0; tvS.tv_usec = SLEEP_TIME;
+    int nfdsSockets = 0;
+    FD_ZERO(&setSockets);
+
+    for(int i = 0; i < maxlen; i++){
+        if(reqList[i].status == REQ_STATUS_INPROGRESS){
+            FD_SET(reqList[i].fdPipe, &setSockets);
+            nfdsSockets = (nfdsSockets <= reqList[i].fdPipe) ? reqList[i].fdPipe+1 : nfdsSockets;
+        }
+    }
+    
+    if(nfdsSockets > 0){
+        // Au moins un socket a de l'info écrite dessus
+    
+        int s = select(nfdsSockets, &setSockets, NULL, NULL, &tvS);
+        if(s > 0){
+            // Au moins un socket est prêt à être lu
+            for(int i = 0; i < maxlen; i++){
+                if(reqList[i].status == REQ_STATUS_INPROGRESS && FD_ISSET(reqList[i].fdPipe, &setSockets)){
+                    
+                    //Si c'est le premier chunk de données qu'on recoit du pipe on sait que les premieres donnes
+                    //seront 
+
+                    size_t length;
+                    int octetsTraites;
+
+                    octetsTraites = read(reqList[i].fdPipe,&length,sizeof(size_t));
+                    if(octetsTraites < 0){
+                        perror("Traiter telechargement erreur lecture taille");
+                    }
+                    else if(octetsTraites != sizeof(size_t)){
+                        printf("Erreur, n'a pas recu taille adequate (sizeof(size_t))");
+                    }
+
+
+                    octetsTraites = 0;
+
+                    char* buffer = malloc(length);
+
+                    while(octetsTraites != (int)length){
+                        int octetsRecus = read(reqList[i].fdPipe, buffer + octetsTraites, length - octetsTraites);
+                        if(octetsRecus < 0){
+                            perror("shittt");
+                            exit(EXIT_FAILURE);
+                        }
+                        octetsTraites += octetsRecus;
+                    }
+
+
+
+                    reqList[i].len = length;
+                    reqList[i].buf = buffer;
+                    reqList[i].status = REQ_STATUS_READYTOSEND;
+                    
+                    int status;
+                    waitpid(reqList[i].pid, &status, 0);
+                    close(reqList[i].fdPipe);
+
+                    return octetsTraites;
+                }
+            }
+        }
+    }
+    
+    return 0;
+    
 }
