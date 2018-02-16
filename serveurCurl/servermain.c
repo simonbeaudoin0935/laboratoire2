@@ -51,8 +51,6 @@ void gereSignal(int signo) {
     }
 }
 
-
-
 int main(int argc, char* argv[]){
     // Chemin du socket UNIX
     // Linux ne supporte pas un chemin de plus de 108 octets (voir man 7 unix)
@@ -86,7 +84,7 @@ int main(int argc, char* argv[]){
     socketfd = socket(address.sun_family, SOCK_STREAM, 0);
     if(socketfd == -1){
         printf("Error with the socket initialization : %s\n", strerror(errno));
-        return -1;
+        exit(0);
     }
 
     // TODO
@@ -95,15 +93,13 @@ int main(int argc, char* argv[]){
     //      Voyez man fcntl pour plus de détails sur le champ à modifier
 
     if (fcntl(socketfd, F_SETFL, O_NONBLOCK) < 0) 
-    { 
         printf("Error with the non-blocking socket : %s\n", strerror(errno));
-    } 
 
     // TODO
     // 4) Faites un bind sur le socket
     //      Vérifiez si l'opération a été effectuée avec succès, sinon quittez le processus en affichant l'erreur
     //      Voyez man bind(2) pour plus de détails sur cette opération
-    if(bind(socketfd, (struct sockaddr *) &address, sizeof(struct sockaddr_un)) == -1)
+    if(bind(socketfd, (struct sockaddr *) &address, sizeof(address)) == -1)
         printf("Error with the binding : %s\n", strerror(errno));
 
     // TODO

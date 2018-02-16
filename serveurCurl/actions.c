@@ -16,6 +16,26 @@ int verifierNouvelleConnexion(struct requete reqList[], int maxlen, int socket){
     // Cette fonction doit retourner 0 si elle n'a pas acceptée de nouvelle connexion, ou 1 dans le cas contraire.
 
     // TODO
+    int newEntry;
+    int acceptSocket;
+    socklen_t peer_addr_size;
+    struct sockaddr_un peer_addr;
+
+    newEntry = nouvelleRequete(reqList, maxlen);
+
+    if(newEntry == -1)
+        return 0;
+
+    peer_addr_size = sizeof(struct sockaddr_un);
+    acceptSocket = accept(socket, (struct sockaddr *) &peer_addr, &peer_addr_size);
+    if(acceptSocket == -1){
+        printf("Error with accept function : %s\n", strerror(errno));
+        return 0;
+    }
+
+    reqList[newEntry].status = REQ_STATUS_LISTEN;
+    reqList[newEntry].fdSocket = socket;
+    return 1;
 }
 
 int traiterConnexions(struct requete reqList[], int maxlen){

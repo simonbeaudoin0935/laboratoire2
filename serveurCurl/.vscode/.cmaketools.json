@@ -6,9 +6,6 @@
     },
     "description": "Emit debug information without performing optimizations"
   },
-<<<<<<< HEAD
-  "activeEnvironments": []
-=======
   "activeEnvironments": [],
   "codeModel": {
     "configurations": [
@@ -81,9 +78,8 @@
         ]
       }
     ],
-    "cookie": "0.10750942857229329",
+    "cookie": "0.1800369762365499",
     "inReplyTo": "codemodel",
     "type": "reply"
   }
->>>>>>> f58e945229af088815a072677a69c3e28166ea16
 }
