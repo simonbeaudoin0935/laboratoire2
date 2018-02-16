@@ -42,6 +42,7 @@
 
 #include "fstools.h"
 
+unsigned int FHCUSTOM = 3;
 
 const char unixSockPath[] = "/tmp/unixsocket";
 
@@ -187,10 +188,10 @@ static int setrfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
 	// On va utiliser strtok, qui modifie la string
 	// On utilise donc une copie
-	//pthread_mutex_lock(&(cache->mutex));
+	pthread_mutex_lock(&(cache->mutex));
 	char *indexStr = malloc(strlen(cache->rootDirIndex) + 1);
 	strcpy(indexStr, cache->rootDirIndex);
-	//pthread_mutex_lock(&(cache->mutex));
+	pthread_mutex_lock(&(cache->mutex));
 
 	// FUSE s'occupe deja des pseudo-fichiers "." et "..",
 	// donc on se contente de lister le fichier d'index qu'on vient de recevoir
@@ -236,7 +237,82 @@ static int setrfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 // énoncées plus haut. Rappelez-vous en particulier qu'un pointeur est unique...
 static int setrfs_open(const char *path, struct fuse_file_info *fi)
 {
-		// TODO
+	// TODO
+	struct fuse_context *context = fuse_get_context();
+
+	struct cacheData *cache = (struct cacheData*)context->private_data;
+	
+	pthread_mutex_lock(&(cache->mutex));
+	struct cacheFichier* fichier = trouverFichierEnCache(path, cache);
+	pthread_mutex_unlock(&(cache->mutex));
+
+	if(fichier != NULL){
+		fi->fh = FHCUSTOM;
+		FHCUSTOM ++;
+	}
+	else{
+		int sock = socket(AF_UNIX, SOCK_STREAM, 0);
+	    if(sock == -1){
+	        perror("Impossible d'initialiser le socket UNIX");
+	        return -1;
+	    }
+		// Ecriture des parametres du socket
+	    struct sockaddr_un sockInfo;
+	    memset(&sockInfo, 0, sizeof(sockInfo));
+	    sockInfo.sun_family = AF_UNIX;
+	    strncpy(sockInfo.sun_path, unixSockPath, sizeof(sockInfo.sun_path) - 1);
+
+		// Connexion
+	    if(connect(sock, (const struct sockaddr *) &sockInfo, sizeof(sockInfo)) < 0){
+	        perror("Erreur connect");
+	        exit(1);
+	    }
+
+		// Formatage et envoi de la requete
+		//size_t len = strlen() + 1;		// +1 pour le caractere NULL de fin de chaine
+	    struct msgReq req;
+	    req.type = REQ_READ;
+	    req.sizePayload = strlen(path);
+		int octetsTraites = envoyerMessage(sock, &req, (char*)path);
+
+		// On attend et on recoit le fichier demande
+		struct msgRep rep;
+		octetsTraites = read(sock, &rep, sizeof(rep));
+		if(octetsTraites == -1){
+			perror("Erreur en effectuant un read() sur un socket pret");
+			exit(1);
+		}
+		if(VERBOSE)
+			printf("Lecture de l'en-tete de la reponse sur le socket %i\n", sock);
+
+		pthread_mutex_lock(&(cache->mutex));
+		fichier->nom = (char*)path;
+		
+		fichier->data = malloc(rep.sizePayload + 1);
+		fichier->data[rep.sizePayload] = 0;
+		unsigned int totalRecu = 0;
+		while(totalRecu < rep.sizePayload){
+		 	octetsTraites = read(sock, fichier->data + totalRecu, rep.sizePayload - totalRecu);
+		 	totalRecu += octetsTraites;
+		}
+
+		fichier->len = totalRecu;
+		fichier->offset = 0;
+
+		insererFichier(fichier, cache);
+
+		incrementeCompteurFichier(path, cache, 1);
+
+		if(fichier != NULL){
+			fi->fh = FHCUSTOM;
+			FHCUSTOM ++;
+		}
+		else
+			exit(0);
+
+		pthread_mutex_unlock(&(cache->mutex));
+	}
+	return 0;
 }
 
 

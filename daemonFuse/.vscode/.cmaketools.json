@@ -7,5 +7,93 @@
     "description": "Emit debug information without performing optimizations"
   },
   "activeEnvironments": [],
-  "codeModel": null
+  "codeModel": {
+    "configurations": [
+      {
+        "name": "Debug",
+        "projects": [
+          {
+            "buildDirectory": "/home/setr/setr/Projets/laboratoire2/daemonFuse/build",
+            "name": "SETR_TP2_CLIENT",
+            "sourceDirectory": "/home/setr/setr/Projets/laboratoire2/daemonFuse",
+            "targets": [
+              {
+                "artifacts": [
+                  "/home/setr/setr/Projets/laboratoire2/daemonFuse/build/tp2client"
+                ],
+                "buildDirectory": "/home/setr/setr/Projets/laboratoire2/daemonFuse/build",
+                "crossReferences": {
+                  "backtrace": [
+                    {
+                      "line": 12,
+                      "name": "add_executable",
+                      "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                    },
+                    {
+                      "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                    }
+                  ],
+                  "relatedStatements": [
+                    {
+                      "backtrace": [
+                        {
+                          "line": 10,
+                          "name": "add_definitions",
+                          "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                        },
+                        {
+                          "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                        }
+                      ],
+                      "type": "target_compile_definitions"
+                    },
+                    {
+                      "backtrace": [
+                        {
+                          "line": 13,
+                          "name": "target_link_libraries",
+                          "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                        },
+                        {
+                          "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                        }
+                      ],
+                      "type": "target_link_libraries"
+                    }
+                  ]
+                },
+                "fileGroups": [
+                  {
+                    "compileFlags": "-Wl,-rpath-link,/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/opt/vc/lib -Wl,-rpath-link,/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/lib/arm-linux-gnueabihf -Wl,-rpath-link,/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/usr/lib/arm-linux-gnueabihf -Wl,-rpath-link,/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/usr/local/lib -g  ",
+                    "defines": [
+                      "_FILE_OFFSET_BITS=64 -Wall -Wextra -Wpedantic -Wduplicated-cond -Wlogical-op -Wnull-dereference -Wjump-misses-init -Wshadow -fno-omit-frame-pointer"
+                    ],
+                    "isGenerated": false,
+                    "language": "C",
+                    "sources": [
+                      "setrfs.c",
+                      "fstools.c",
+                      "communications.c"
+                    ]
+                  }
+                ],
+                "fullName": "tp2client",
+                "linkFlags": "-rdynamic",
+                "linkLanguageFlags": "-Wl,-rpath-link,/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/opt/vc/lib -Wl,-rpath-link,/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/lib/arm-linux-gnueabihf -Wl,-rpath-link,/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/usr/lib/arm-linux-gnueabihf -Wl,-rpath-link,/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot/usr/local/lib -g",
+                "linkLibraries": "-lfuse",
+                "linkerLanguage": "C",
+                "name": "tp2client",
+                "sourceDirectory": "/home/setr/setr/Projets/laboratoire2/daemonFuse",
+                "sysroot": "/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot",
+                "type": "EXECUTABLE"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cookie": "0.47763786731502966",
+    "inReplyTo": "codemodel",
+    "type": "reply"
+  }
 }
