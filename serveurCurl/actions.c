@@ -29,12 +29,13 @@ int verifierNouvelleConnexion(struct requete reqList[], int maxlen, int socket){
     peer_addr_size = sizeof(struct sockaddr_un);
     acceptSocket = accept(socket, (struct sockaddr *) &peer_addr, &peer_addr_size);
     if(acceptSocket == -1){
-        printf("Error with accept function : %s\n", strerror(errno));
+        //perror("accept socket");
+        //printf(ERRNONAME(errno));
         return 0;
     }
 
     reqList[newEntry].status = REQ_STATUS_LISTEN;
-    reqList[newEntry].fdSocket = socket;
+    reqList[newEntry].fdSocket = acceptSocket;
     return 1;
 }
 
@@ -169,4 +170,34 @@ int traiterTelechargements(struct requete reqList[], int maxlen){
     // Cette fonction doit retourner 0 si elle n'a lu aucune donnée supplémentaire, ou un nombre > 0 si c'est le cas.
 
     // TODO
+
+    fd_set setSockets;
+    struct timeval tvS;
+    tvS.tv_sec = 0; tvS.tv_usec = SLEEP_TIME;
+    int nfdsSockets = 0;
+    FD_ZERO(&setSockets);
+
+    for(int i = 0; i < maxlen; i++){
+        if(reqList[i].status == REQ_STATUS_INPROGRESS){
+            FD_SET(reqList[i].fdSocket, &setSockets);
+            nfdsSockets = (nfdsSockets <= reqList[i].fdSocket) ? reqList[i].fdSocket+1 : nfdsSockets;
+        }
+    }
+    
+    if(nfdsSockets > 0){
+        // Au moins un socket a de l'info écrite dessus
+
+        int s = select(nfdsSockets, &setSockets, NULL, NULL, &tvS);
+        if(s > 0){
+            // Au moins un socket est prêt à être lu
+            for(int i = 0; i < maxlen; i++){
+                if(reqList[i].status == REQ_STATUS_INPROGRESS && FD_ISSET(reqList[i].fdSocket, &setSockets)){
+                    struct msgReq req;
+                    char* buffer = malloc(sizeof(req));
+
+                
+                }
+            }
+        }
+    }
 }
