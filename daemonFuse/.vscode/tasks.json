@@ -6,7 +6,7 @@
         {
             "label": "syncAndStartGDB",
             "type": "shell",
-            "command": "./syncAndStartGDB.sh ${workspaceRoot} 10.248.69.68",
+            "command": "./syncAndStartGDB.sh ${workspaceRoot} 192.168.2.155",
             "presentation": {
                 "reveal": "always",
                 "panel": "new"
