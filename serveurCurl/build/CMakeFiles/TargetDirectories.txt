@@ -1,9 +1,0 @@
-<<<<<<< HEAD
-/home/simon/setr/Projets/laboratoire2/serveurCurl/build/CMakeFiles/edit_cache.dir
-/home/simon/setr/Projets/laboratoire2/serveurCurl/build/CMakeFiles/rebuild_cache.dir
-/home/simon/setr/Projets/laboratoire2/serveurCurl/build/CMakeFiles/tp2serveur.dir
-=======
-/home/setr/setr/Projets/laboratoire2/serveurCurl/build/CMakeFiles/rebuild_cache.dir
-/home/setr/setr/Projets/laboratoire2/serveurCurl/build/CMakeFiles/tp2serveur.dir
-/home/setr/setr/Projets/laboratoire2/serveurCurl/build/CMakeFiles/edit_cache.dir
->>>>>>> f58e945229af088815a072677a69c3e28166ea16
