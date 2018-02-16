@@ -88,6 +88,37 @@ static int setrfs_getattr(const char *path, struct stat *stbuf)
 	stbuf->st_gid = context->gid;		// Idem pour le groupe
 
 	// TODO
+
+	stbuf->st_dev = 0;
+	stbuf->st_ino = 0;
+	stbuf->st_rdev = 0;
+	stbuf->st_size = 0;
+	stbuf->st_blksize = 0;
+	stbuf->st_blocks = 0;
+
+
+	// Root folder
+	if ( strcmp( path, "/" ) == 0 ) {
+
+		stbuf->st_mode = S_IFDIR | 0777;
+		stbuf->st_nlink = 2;
+		stbuf->st_size = 1;
+	}
+	else {
+
+		stbuf->st_mode = S_IFREG | 0777;
+		stbuf->st_nlink = 1;
+
+		struct cacheData *cache = (struct cacheData*)context->private_data;
+
+		pthread_mutex_lock(&(cache->mutex));
+		struct cacheFichier *fichier = trouverFichierEnCache(path, cache);
+		if (fichier == NULL) stbuf->st_size = 1;
+		else stbuf->st_size = fichier->len * strlen(fichier->data);
+		pthread_mutex_unlock(&(cache->mutex));
+	}
+		
+	return 0;
 }
 
 
