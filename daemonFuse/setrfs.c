@@ -337,6 +337,7 @@ static int setrfs_read(const char *path, char *buf, size_t size, off_t offset,
 		    struct fuse_file_info *fi)
 {
 	// TODO
+	return 0;
 }
 
 
@@ -354,6 +355,8 @@ static int setrfs_release(const char *path, struct fuse_file_info *fi) {
 	struct cacheFichier *fichier = trouverFichierEnCache(path, cache);
 	retireFichier(fichier, cache);
 	pthread_mutex_unlock(&(cache->mutex));
+
+	return 0;
 }
 
 
