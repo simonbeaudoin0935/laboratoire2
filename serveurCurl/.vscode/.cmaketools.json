@@ -13,24 +13,24 @@
         "name": "Debug",
         "projects": [
           {
-            "buildDirectory": "/home/setr/setr/Projets/laboratoire2/serveurCurl/build",
+            "buildDirectory": "/home/setr/Projets/laboratoire2/serveurCurl/build",
             "name": "SETR_TP2_SERVEUR",
-            "sourceDirectory": "/home/setr/setr/Projets/laboratoire2/serveurCurl",
+            "sourceDirectory": "/home/setr/Projets/laboratoire2/serveurCurl",
             "targets": [
               {
                 "artifacts": [
-                  "/home/setr/setr/Projets/laboratoire2/serveurCurl/build/tp2serveur"
+                  "/home/setr/Projets/laboratoire2/serveurCurl/build/tp2serveur"
                 ],
-                "buildDirectory": "/home/setr/setr/Projets/laboratoire2/serveurCurl/build",
+                "buildDirectory": "/home/setr/Projets/laboratoire2/serveurCurl/build",
                 "crossReferences": {
                   "backtrace": [
                     {
                       "line": 11,
                       "name": "add_executable",
-                      "path": "/home/setr/setr/Projets/laboratoire2/serveurCurl/CMakeLists.txt"
+                      "path": "/home/setr/Projets/laboratoire2/serveurCurl/CMakeLists.txt"
                     },
                     {
-                      "path": "/home/setr/setr/Projets/laboratoire2/serveurCurl/CMakeLists.txt"
+                      "path": "/home/setr/Projets/laboratoire2/serveurCurl/CMakeLists.txt"
                     }
                   ],
                   "relatedStatements": [
@@ -39,10 +39,10 @@
                         {
                           "line": 12,
                           "name": "target_link_libraries",
-                          "path": "/home/setr/setr/Projets/laboratoire2/serveurCurl/CMakeLists.txt"
+                          "path": "/home/setr/Projets/laboratoire2/serveurCurl/CMakeLists.txt"
                         },
                         {
-                          "path": "/home/setr/setr/Projets/laboratoire2/serveurCurl/CMakeLists.txt"
+                          "path": "/home/setr/Projets/laboratoire2/serveurCurl/CMakeLists.txt"
                         }
                       ],
                       "type": "target_link_libraries"
@@ -69,7 +69,7 @@
                 "linkLibraries": "-lcurl",
                 "linkerLanguage": "C",
                 "name": "tp2serveur",
-                "sourceDirectory": "/home/setr/setr/Projets/laboratoire2/serveurCurl",
+                "sourceDirectory": "/home/setr/Projets/laboratoire2/serveurCurl",
                 "sysroot": "/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot",
                 "type": "EXECUTABLE"
               }
@@ -78,7 +78,7 @@
         ]
       }
     ],
-    "cookie": "0.6020374472791077",
+    "cookie": "0.13976756951252534",
     "inReplyTo": "codemodel",
     "type": "reply"
   }

@@ -115,7 +115,7 @@ static int setrfs_getattr(const char *path, struct stat *stbuf)
 		pthread_mutex_lock(&(cache->mutex));
 		struct cacheFichier *fichier = trouverFichierEnCache(path, cache);
 		if (fichier == NULL) stbuf->st_size = 1;
-		else stbuf->st_size = fichier->len * strlen(fichier->data);
+		else stbuf->st_size = fichier->len;
 		pthread_mutex_unlock(&(cache->mutex));
 	}
 		
@@ -188,10 +188,10 @@ static int setrfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
 	// On va utiliser strtok, qui modifie la string
 	// On utilise donc une copie
-	pthread_mutex_lock(&(cache->mutex));
+	// pthread_mutex_lock(&(cache->mutex));
 	char *indexStr = malloc(strlen(cache->rootDirIndex) + 1);
 	strcpy(indexStr, cache->rootDirIndex);
-	pthread_mutex_lock(&(cache->mutex));
+	// pthread_mutex_lock(&(cache->mutex));
 
 	// FUSE s'occupe deja des pseudo-fichiers "." et "..",
 	// donc on se contente de lister le fichier d'index qu'on vient de recevoir
@@ -251,6 +251,9 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 		FHCUSTOM ++;
 	}
 	else{
+
+		fichier = (struct cacheFichier *) malloc(sizeof(struct cacheFichier));
+
 		int sock = socket(AF_UNIX, SOCK_STREAM, 0);
 	    if(sock == -1){
 	        perror("Impossible d'initialiser le socket UNIX");
@@ -287,11 +290,10 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 
 		pthread_mutex_lock(&(cache->mutex));
 		fichier->nom = (char*)path;
-		
-		fichier->data = malloc(rep.sizePayload + 1);
+		fichier->data = (char*) malloc(rep.sizePayload + 1);
 		fichier->data[rep.sizePayload] = 0;
 		unsigned int totalRecu = 0;
-		while(totalRecu < rep.sizePayload){
+		while(totalRecu < rep.sizePayload) {
 		 	octetsTraites = read(sock, fichier->data + totalRecu, rep.sizePayload - totalRecu);
 		 	totalRecu += octetsTraites;
 		}
@@ -323,7 +325,7 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 // Vous devez :
 // 1) Vérifier que la taille de lecture demandée ne dépasse pas les limites du fichier, compte tenu du décalage
 // 2) Si oui, réduire la taille pour lire le reste du fichier
-// 3) Copier le même nombre d'octets depuis le cache vers le pointeur buf
+// 3) Copier le même nombre d'octets depuis la cache vers le pointeur buf
 // 4) Retourner le nombre d'octets copiés
 //
 // Voir man read(2) pour plus de détails sur cette fonction. En particulier, notez que cette fonction peut retourner
@@ -334,9 +336,29 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 // N'oubliez pas que vous recevez le file handle dans la structure fuse_file_info. Vous n'êtes pas forcés de l'utiliser,
 // mais si vous y avez mis quelque chose d'utile, il est facile de le récupérer!
 static int setrfs_read(const char *path, char *buf, size_t size, off_t offset,
-		    struct fuse_file_info *fi)
-{
+		    struct fuse_file_info *fi) {
+
 	// TODO
+	struct fuse_context *context = fuse_get_context();
+	struct cacheData *cache = (struct cacheData*)context->private_data;
+	
+	pthread_mutex_lock(&(cache->mutex));
+	struct cacheFichier* fichier = trouverFichierEnCache(path, cache);
+
+	// checker si la taille de lecture est correcte
+	size_t file_size = fichier->len;
+	if (file_size < size + offset) { 
+		
+		size = file_size - offset;
+	}
+	
+	for (int i = 0; i < size; i++) {
+
+		buf[i] = fichier->data[i+offset];
+	}
+	pthread_mutex_unlock(&(cache->mutex));
+	// retourner le nombre d'octets copiés
+	return size;
 }
 
 
@@ -352,8 +374,14 @@ static int setrfs_release(const char *path, struct fuse_file_info *fi) {
 
 	pthread_mutex_lock(&(cache->mutex));
 	struct cacheFichier *fichier = trouverFichierEnCache(path, cache);
-	retireFichier(fichier, cache);
+	incrementeCompteurFichier(path, cache, -1);
+	if (fichier->countOpen == 0) {
+		retireFichier(fichier, cache);
+		free(fi);
+	}
 	pthread_mutex_unlock(&(cache->mutex));
+
+	return 0;
 }
 
 

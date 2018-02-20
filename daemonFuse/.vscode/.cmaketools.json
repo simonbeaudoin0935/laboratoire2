@@ -13,24 +13,24 @@
         "name": "Debug",
         "projects": [
           {
-            "buildDirectory": "/home/setr/setr/Projets/laboratoire2/daemonFuse/build",
+            "buildDirectory": "/home/setr/Projets/laboratoire2/daemonFuse/build",
             "name": "SETR_TP2_CLIENT",
-            "sourceDirectory": "/home/setr/setr/Projets/laboratoire2/daemonFuse",
+            "sourceDirectory": "/home/setr/Projets/laboratoire2/daemonFuse",
             "targets": [
               {
                 "artifacts": [
-                  "/home/setr/setr/Projets/laboratoire2/daemonFuse/build/tp2client"
+                  "/home/setr/Projets/laboratoire2/daemonFuse/build/tp2client"
                 ],
-                "buildDirectory": "/home/setr/setr/Projets/laboratoire2/daemonFuse/build",
+                "buildDirectory": "/home/setr/Projets/laboratoire2/daemonFuse/build",
                 "crossReferences": {
                   "backtrace": [
                     {
                       "line": 12,
                       "name": "add_executable",
-                      "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                      "path": "/home/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
                     },
                     {
-                      "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                      "path": "/home/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
                     }
                   ],
                   "relatedStatements": [
@@ -39,10 +39,10 @@
                         {
                           "line": 10,
                           "name": "add_definitions",
-                          "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                          "path": "/home/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
                         },
                         {
-                          "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                          "path": "/home/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
                         }
                       ],
                       "type": "target_compile_definitions"
@@ -52,10 +52,10 @@
                         {
                           "line": 13,
                           "name": "target_link_libraries",
-                          "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                          "path": "/home/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
                         },
                         {
-                          "path": "/home/setr/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
+                          "path": "/home/setr/Projets/laboratoire2/daemonFuse/CMakeLists.txt"
                         }
                       ],
                       "type": "target_link_libraries"
@@ -83,7 +83,7 @@
                 "linkLibraries": "-lfuse",
                 "linkerLanguage": "C",
                 "name": "tp2client",
-                "sourceDirectory": "/home/setr/setr/Projets/laboratoire2/daemonFuse",
+                "sourceDirectory": "/home/setr/Projets/laboratoire2/daemonFuse",
                 "sysroot": "/home/setr/arm-cross-comp-env/arm-raspbian-linux-gnueabihf/arm-raspbian-linux-gnueabihf/sysroot",
                 "type": "EXECUTABLE"
               }
@@ -92,7 +92,7 @@
         ]
       }
     ],
-    "cookie": "0.47763786731502966",
+    "cookie": "0.3301374473007874",
     "inReplyTo": "codemodel",
     "type": "reply"
   }
