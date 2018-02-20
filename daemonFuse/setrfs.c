@@ -46,7 +46,7 @@ unsigned int FHCUSTOM = 3;
 
 const char unixSockPath[] = "/tmp/unixsocket";
 
-
+void print_cache();
 
 // Cette fonction initialise le cache et l'insère dans le contexte de FUSE, qui sera
 // accessible à toutes les autres fonctions.
@@ -80,6 +80,7 @@ void* setrfs_init(struct fuse_conn_info *conn){
 // lignes dans d'autres fonctions.
 static int setrfs_getattr(const char *path, struct stat *stbuf)
 {
+
 	// On récupère le contexte
 	struct fuse_context *context = fuse_get_context();
 
@@ -115,7 +116,7 @@ static int setrfs_getattr(const char *path, struct stat *stbuf)
 		pthread_mutex_lock(&(cache->mutex));
 		struct cacheFichier *fichier = trouverFichierEnCache(path, cache);
 		if (fichier == NULL) stbuf->st_size = 1;
-		else stbuf->st_size = fichier->len;
+		else if (fichier->countOpen > 0) stbuf->st_size = fichier->len;
 		pthread_mutex_unlock(&(cache->mutex));
 	}
 		
@@ -237,6 +238,7 @@ static int setrfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 // énoncées plus haut. Rappelez-vous en particulier qu'un pointeur est unique...
 static int setrfs_open(const char *path, struct fuse_file_info *fi)
 {
+
 	// TODO
 	struct fuse_context *context = fuse_get_context();
 
@@ -252,7 +254,7 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 	}
 	else{
 
-		fichier = (struct cacheFichier *) malloc(sizeof(struct cacheFichier));
+		fichier = malloc(sizeof(struct cacheFichier));
 
 		int sock = socket(AF_UNIX, SOCK_STREAM, 0);
 	    if(sock == -1){
@@ -289,8 +291,11 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 			printf("Lecture de l'en-tete de la reponse sur le socket %i\n", sock);
 
 		pthread_mutex_lock(&(cache->mutex));
-		fichier->nom = (char*)path;
-		fichier->data = (char*) malloc(rep.sizePayload + 1);
+		fichier->nom = malloc(strlen(path) + 1);
+		//fichier->nom = (char*)path;
+		strncpy(fichier->nom, path, strlen(path));
+		fichier->nom[strlen(path)] = 0;
+		fichier->data = malloc(rep.sizePayload + 1);
 		fichier->data[rep.sizePayload] = 0;
 		unsigned int totalRecu = 0;
 		while(totalRecu < rep.sizePayload) {
@@ -300,19 +305,22 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 
 		fichier->len = totalRecu;
 		fichier->offset = 0;
+		fichier->countOpen = 0;
 
 		insererFichier(fichier, cache);
 
-		incrementeCompteurFichier(path, cache, 1);
+		
 
 		if(fichier != NULL){
+			
 			fi->fh = FHCUSTOM;
 			FHCUSTOM ++;
+			pthread_mutex_unlock(&(cache->mutex));
 		}
-		else
-			exit(0);
+		else{
 
-		pthread_mutex_unlock(&(cache->mutex));
+			pthread_mutex_unlock(&(cache->mutex));
+		}
 	}
 	return 0;
 }
@@ -345,6 +353,7 @@ static int setrfs_read(const char *path, char *buf, size_t size, off_t offset,
 	
 	pthread_mutex_lock(&(cache->mutex));
 	struct cacheFichier* fichier = trouverFichierEnCache(path, cache);
+	incrementeCompteurFichier(path, cache, 1);
 
 	// checker si la taille de lecture est correcte
 	size_t file_size = fichier->len;
@@ -375,14 +384,35 @@ static int setrfs_release(const char *path, struct fuse_file_info *fi) {
 
 	pthread_mutex_lock(&(cache->mutex));
 	struct cacheFichier *fichier = trouverFichierEnCache(path, cache);
-	incrementeCompteurFichier(path, cache, -1);
+	if (fichier->countOpen >= 1)
+		incrementeCompteurFichier(path, cache, -1);
+
 	if (fichier->countOpen == 0) {
 		retireFichier(fichier, cache);
-		free(fi);
 	}
 	pthread_mutex_unlock(&(cache->mutex));
 
 	return 0;
+}
+
+void print_cache() {
+
+	struct fuse_context *context = fuse_get_context();
+	struct cacheData *cache = (struct cacheData*)context->private_data;
+
+	pthread_mutex_lock(&(cache->mutex));
+
+	struct cacheFichier *fichier = cache->firstFile;
+	while(fichier != NULL){
+
+		printf(fichier->nom);
+		printf("\n");
+		printf(fichier->data);
+		printf("\n");
+		fichier = fichier->next;
+	}
+
+	pthread_mutex_unlock(&(cache->mutex));
 }
 
 
