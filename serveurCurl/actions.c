@@ -210,7 +210,15 @@ int traiterTelechargements(struct requete reqList[], int maxlen){
                     }
 
 
+
                     octetsTraites = 0;
+
+
+                    //il y a eu une erreur de telechargement
+                    if(length == 0)
+                    {
+
+                    }
 
                     char* buffer = malloc(length);
 

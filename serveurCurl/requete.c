@@ -20,6 +20,7 @@ int envoyerReponses(struct requete reqList[], int lenreq){
             if(repHeader.sizePayload == 0){
                 // Erreur lors du telechargement
                 repHeader.status = STATUS_ERREUR_TELECHARGEMENT;
+                printf("ERREUR LORS DU TELECHARGEMENT\n");
             }
             else{
                 repHeader.status = STATUS_OK;

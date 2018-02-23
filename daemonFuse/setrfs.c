@@ -290,6 +290,11 @@ static int setrfs_open(const char *path, struct fuse_file_info *fi)
 		if(VERBOSE)
 			printf("Lecture de l'en-tete de la reponse sur le socket %i\n", sock);
 
+		if(rep.status == STATUS_ERREUR_TELECHARGEMENT)
+		{
+			errno = ENOENT;
+			return 1;
+		}
 		pthread_mutex_lock(&(cache->mutex));
 		fichier->nom = malloc(strlen(path) + 1);
 		//fichier->nom = (char*)path;
